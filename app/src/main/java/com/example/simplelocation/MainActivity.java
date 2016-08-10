@@ -1,8 +1,10 @@
 package com.example.simplelocation;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -50,6 +52,17 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(TAG, "onConnected: "
         + location.getLatitude() + " "
         + location.getLongitude());
+//start implicit intent to open map
+        Intent intent=null, chooser=null;
+
+        intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("geo:43.039393,-76.133317"));
+
+        chooser = Intent.createChooser(intent,"Visit Syracuse U.");
+
+        startActivity(chooser);
+//end
+
     }
 
     @Override

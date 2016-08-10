@@ -1,8 +1,11 @@
 package com.example.simplelocation;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements
         mGoogleAPIClient = buildGoogleApiClient();
         mGoogleAPIClient.connect();
     }
+
     protected synchronized GoogleApiClient buildGoogleApiClient() {
         return new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -35,6 +39,12 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         Location location = LocationServices.FusedLocationApi
                 .getLastLocation(mGoogleAPIClient);
         Log.d(TAG, "onConnected: "
